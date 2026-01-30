@@ -11,23 +11,51 @@ Transform YouTube educational videos into comprehensive learning experiences wit
 
 **YouTube's Captions API requires OAuth2 authentication** (not simple API keys), making automated transcript extraction complex.
 
-### ✅ Working Solution: Manual Transcript Input
+### ✅ **NEW: Manual Transcript Input Feature**
 
-**How to use this app:**
+**The app now has TWO modes:**
+
+#### 📺 YouTube URL Mode
+- Try automated extraction (may work for some videos)
+- Quick if it works
+- Subject to YouTube restrictions
+
+#### ✍️ Manual Transcript Mode (Recommended)
+**How to use:**
 
 1. **Open your video on YouTube**
 2. **Click "..." → "Show transcript"**  
-3. **Copy the transcript text**
-4. **Paste into this app** (use manual input option)
-5. **Get AI summary, key points, and quiz!**
+3. **Copy the transcript text** (Ctrl+A, Ctrl+C)
+4. **Switch to "Manual Transcript" mode in the app**
+5. **Paste transcript + Enter video title**
+6. **Get AI summary, key points, and quiz!**
 
-This method is:
-- ✅ Simple and fast (30 seconds)
+**Benefits:**
 - ✅ Works 100% of the time
-- ✅ No API keys needed
-- ✅ No authentication required
+- ✅ No API restrictions
+- ✅ Works with any video (private, age-restricted, etc.)
+- ✅ Takes only 30 seconds
 
-📖 **See [YOUTUBE_API_SETUP.md](YOUTUBE_API_SETUP.md) for details**
+📖 **See [MANUAL_TRANSCRIPT_FEATURE.md](MANUAL_TRANSCRIPT_FEATURE.md) for detailed guide**  
+📖 **See [YOUTUBE_API_SETUP.md](YOUTUBE_API_SETUP.md) for technical details**
+
+---
+
+## 🔑 Required API Keys
+
+**To use this app, you need TWO API keys:**
+
+1. **OpenAI API Key** (Required for AI features)
+   - Get from: https://platform.openai.com/api-keys
+   - Free $5 credits for new accounts
+   - See [OPENAI_API_SETUP.md](OPENAI_API_SETUP.md) for setup
+
+2. **YouTube Data API Key** (Optional, for automated extraction)
+   - Get from: https://console.cloud.google.com/
+   - Currently has limitations (see above)
+   - See [YOUTUBE_API_SETUP.md](YOUTUBE_API_SETUP.md)
+
+**Without OpenAI key, video processing will fail with a 500 error.**
 
 ---
 

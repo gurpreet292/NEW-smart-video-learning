@@ -35,6 +35,19 @@ const errorHandler = (err, req, res, next) => {
     });
   }
 
+  // Transcript extraction errors (return 422 - Unprocessable Entity)
+  if (err.message && (
+    err.message.includes('transcript') || 
+    err.message.includes('caption') || 
+    err.message.includes('YouTube')
+  )) {
+    return res.status(422).json({
+      status: 'error',
+      message: err.message,
+      type: 'TRANSCRIPT_ERROR'
+    });
+  }
+
   // Default error
   res.status(err.statusCode || 500).json({
     status: 'error',

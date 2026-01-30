@@ -15,6 +15,14 @@ class VideoController {
       const { videoUrl } = req.body;
       const userId = req.user._id;
 
+      // Check if OpenAI API key is configured
+      if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY.includes('placeholder') || process.env.OPENAI_API_KEY.includes('your-actual')) {
+        return res.status(500).json({
+          status: 'error',
+          message: '🔑 OpenAI API Key Required\n\nThe app needs an OpenAI API key to generate summaries and quizzes.\n\nSetup:\n1. Get API key from: https://platform.openai.com/api-keys\n2. Add to backend/.env: OPENAI_API_KEY=sk-...\n3. Restart backend server\n\nNote: OpenAI offers free trial credits for new accounts.'
+        });
+      }
+
       // Step 1: Fetch transcript
       const transcriptData = await TranscriptService.fetchTranscript(videoUrl);
       
@@ -124,7 +132,7 @@ class VideoController {
       const video = await Video.findOne({
         _id: videoId,
         userId
-      }).populate('quiz');
+      });
 
       if (!video) {
         return res.status(404).json({
@@ -132,6 +140,10 @@ class VideoController {
           message: 'Video not found'
         });
       }
+
+      // Fetch quiz separately since it's in a different collection
+      const Quiz = require('../models/Quiz');
+      const quiz = await Quiz.findOne({ videoId: video._id, userId });
 
       res.status(200).json({
         status: 'success',
@@ -144,7 +156,12 @@ class VideoController {
             thumbnail: video.thumbnail,
             summary: video.aiContent.summary,
             keyPoints: video.aiContent.keyPoints,
-            quiz: video.quiz,
+            quiz: quiz ? {
+              id: quiz._id,
+              questions: quiz.questions,
+              totalQuestions: quiz.totalQuestions,
+              attempts: quiz.attempts
+            } : null,
             createdAt: video.createdAt,
             status: video.status
           }

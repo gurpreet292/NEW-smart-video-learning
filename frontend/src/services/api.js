@@ -56,6 +56,9 @@ export const videoService = {
   processVideo: (videoUrl) =>
     api.post('/videos/process', { videoUrl }),
   
+  processManualTranscript: (title, transcript, videoUrl = '') =>
+    api.post('/videos/process-text', { title, transcript, videoUrl }),
+  
   getVideoById: (videoId) =>
     api.get(`/videos/${videoId}`),
   

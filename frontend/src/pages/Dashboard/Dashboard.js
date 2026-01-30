@@ -26,19 +26,38 @@ const Dashboard = () => {
     }
   };
 
-  const handleVideoSubmit = async (videoUrl) => {
+  const handleVideoSubmit = async (data) => {
     setLoading(true);
     try {
-      const response = await videoService.processVideo(videoUrl);
-      toast.success('Video processed successfully!');
+      let response;
+      
+      if (data.mode === 'url') {
+        response = await videoService.processVideo(data.videoUrl);
+      } else {
+        response = await videoService.processManualTranscript(data.title, data.transcript, data.videoUrl);
+      }
+      
+      toast.success('Content processed successfully!');
       
       // Navigate to video detail page
       setTimeout(() => {
         navigate(`/video/${response.data.video.id}`);
       }, 1000);
     } catch (error) {
-      const message = error.response?.data?.message || 'Failed to process video';
-      toast.error(message);
+      const errorData = error.response?.data;
+      let message = errorData?.message || 'Failed to process content';
+      
+      // Special handling for transcript errors
+      if (errorData?.type === 'TRANSCRIPT_ERROR' || message.includes('transcript') || message.includes('caption')) {
+        toast.error(
+          'Unable to extract transcript from this video. Try using Manual Transcript mode instead!',
+          { duration: 6000 }
+        );
+      } else if (message.includes('OpenAI') || message.includes('API Key')) {
+        toast.error('OpenAI API key not configured. Please add your API key to backend/.env file.', { duration: 5000 });
+      } else {
+        toast.error(message);
+      }
     } finally {
       setLoading(false);
     }
