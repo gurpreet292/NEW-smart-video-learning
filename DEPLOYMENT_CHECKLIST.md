@@ -114,3 +114,66 @@ REACT_APP_API_URL=http://localhost:5000/api
 - Update CORS settings after both are deployed
 
 Good luck with your deployment! 🎉
+
+---
+
+## 🔗 Connecting Vercel Frontend to Render Backend
+
+### Quick Setup Guide:
+
+#### 1️⃣ **Deploy Backend to Render**
+   - Root Directory: `backend`
+   - Build Command: `npm install`
+   - Start Command: `npm start`
+   
+   **Add these Environment Variables in Render:**
+   ```
+   PORT=10000
+   NODE_ENV=production
+   MONGODB_URI=<your-atlas-uri>
+   JWT_SECRET=<generate-with-openssl>
+   CLIENT_URL=https://your-app.vercel.app
+   ```
+   
+   **Copy your Render URL**: `https://your-backend.onrender.com`
+
+#### 2️⃣ **Deploy Frontend to Vercel**
+   - Root Directory: `frontend`
+   - Framework: Create React App
+   - Build Command: `npm run build`
+   
+   **Add these Environment Variables in Vercel:**
+   ```
+   REACT_APP_API_URL=https://your-backend.onrender.com/api
+   ```
+
+#### 3️⃣ **Update Backend with Frontend URL**
+   - Go back to Render
+   - Update `CLIENT_URL` to your Vercel URL
+   - Redeploy backend
+
+### 🧪 Test Connection:
+```bash
+# Test backend
+curl https://your-backend.onrender.com/api/health
+
+# Visit frontend
+https://your-app.vercel.app
+```
+
+---
+
+## 📋 Common Issues:
+
+### CORS Error
+✅ Make sure `CLIENT_URL` in Render exactly matches your Vercel URL
+
+### 404 on API
+✅ Verify `REACT_APP_API_URL` ends with `/api`
+
+### MongoDB Connection Failed
+✅ Check MongoDB Atlas allows connections from `0.0.0.0/0`
+
+---
+
+For detailed instructions, see: [DEPLOYMENT_CONFIG.md](DEPLOYMENT_CONFIG.md)
